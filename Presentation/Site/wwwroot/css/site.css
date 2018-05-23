@@ -1,0 +1,16 @@
+.titulo {
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+.bootstrap-tagsinput {
+    line-height: 39px;
+}
+
+.bootstrap-tagsinput button {
+    margin-left: 4px;
+}
+
+img#logo {
+    margin-bottom: 10px;
+}

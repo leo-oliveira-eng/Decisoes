@@ -1,0 +1,61 @@
+﻿@{
+    ViewData["Title"] = "Projetos";
+}
+<div ng-app="decisoes" ng-controller="HomeController" ng-init="CarregarProjetos()">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <ul class="navbar-nav">
+            <form class="form-inline">
+                <div class="input-group">
+                    <button type="button" class="btn" ng-click="Cadastrar = true"><i class="fa fa-plus" aria-hidden="true"></i></button>&acute;
+                    <span class="input-group-addon">@@</span>
+                    <input type="text" class="form-control" placeholder="Pesquisar Projeto" ng-model="Nome" maxlength="50">
+                    &acute;<button type="button" class="btn" ng-click="FiltrarProjetosPorNome()"><i class="fa fa-search" aria-hidden="true"></i></button>
+                </div> 
+            </form>
+        </ul>
+    </nav>
+    <br/>
+    <div class="row" ng-if="Projetos.length > 0">
+        <div class="col-sm-4" ng-if="Cadastrar">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <input type="text" class="form-control" placeholder="Nome do Projeto" id="NomeDoProjeto" maxlength="50">
+                    </h4>
+                    <div class="alert alert-danger" ng-if="ErroCadastroDeProjeto">
+                        Erro ao cadastrar o projeto. Tente novamente ou faça contato com o suporte.
+                    </div>
+                    <p class="card-text">{{x.Projeto.Descricao}}.<br/><i>@DateTime.Now.ToString()</i></p>
+                    <button type="button" class="btn btn-primary" ng-click="CadastrarProjeto()"><i class="fa fa-check" aria-hidden="true"></i></button> <button type="button" class="btn btn-danger" ng-click="CancelarCadastro()"><i class="fa fa-times" aria-hidden="true"></i></button>
+                </div>
+            </div>
+            <br/>
+        </div>
+        <div class="col-sm-4" ng-repeat="x in Projetos">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title"><a href="Projeto/Carregar/{{x.Projeto.Id}}">{{x.Projeto.Nome}}</a></h4>
+                    <p class="card-text">{{x.Projeto.Descricao}}.<br/><i>{{x.Projeto.DataCadastro}}</i></p>
+                    <a href="#" class="card-link">{{x.QuantidadeAlternativas}} Alternativas</a>
+                    <a href="#" class="card-link">{{x.QuantidadeCriterios}} Critérios</a>
+                </div>
+            </div>
+            <br/>
+        </div>
+    </div>
+    <div class="row" ng-if="Projetos.length == 0 && !ErroAoCarregarProjetos">
+        <div class="col-sm-12">
+            Nenhum projeto a ser exibido.
+        </div>
+    </div>
+    <div class="row" ng-if="ErroAoCarregarProjetos">
+        <div class="col-sm-12">
+            Um erro aconteceu ao carregar os projetos. Recarregue a página ou faça contato com o suporte.
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12"><a href="">Carregar mais...</a></div>
+    </div>
+</div>
+
+<script src="~/js/controllers/HomeController.js"></script>

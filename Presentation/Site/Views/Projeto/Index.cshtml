@@ -1,0 +1,115 @@
+@{
+    ViewData["Title"] = "Projeto";
+}
+<input type="hidden" name="idProjeto" id="idProjeto" value="@ViewBag.Id.ToString()" />
+
+<div ng-app="decisoes" ng-controller="ProjetoController" ng-init="Init()">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <div class="input-group titulo">
+            {{Projeto.Nome}}
+        </div> 
+    </nav>
+    <br/>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="col-sm-12">
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link active" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Critérios</a>
+                        <a class="nav-item nav-link" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Alternativas</a>
+                        <a class="nav-item nav-link" id="nav-matriz-tab" data-toggle="tab" href="#nav-matriz" role="tab" aria-controls="nav-matriz" aria-selected="true">Matriz</a>
+                        <a class="nav-item nav-link" id="nav-matriz-relatorio" data-toggle="tab" href="#nav-relatorio" role="tab" aria-controls="nav-relatorio" aria-selected="true">Relatório</a>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                        <br/>
+                        <form class="form-inline" action="/action_page.php">
+                            <label for="Nome">Nome:</label>&nbsp;
+                            <input type="text" class="form-control" ng-model="NomeCriterio" id="Nome" />&nbsp;
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                Tipo
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" ng-click="TipoCriterio = 0" href="javascript: void(0);">Custo</a>
+                                <a class="dropdown-item" ng-click="TipoCriterio = 1" href="javascript: void(0);">Benfício</a>
+                            </div>&nbsp;
+                            <label for="Peso">Peso:</label>&nbsp;
+                            <input type="number" ng-model="Peso" ng-click="Peso = null" class="form-control" id="Peso" />&nbsp;
+                            <input type="hidden" ng-model="TipoCriterio"/>
+                            <button type="button" class="btn btn-primary" ng-click="salvarCriterio()">Adicionar</button>
+                        </form>
+                        <br/>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Nome</th>
+                                    <th scope="col">Tipo</th>
+                                    <th scope="col">Peso</th>
+                                    <th scope="col">Exclusão</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="criterio in Criterios">
+                                    <th scope="row">{{criterio.Id}}</th>
+                                    <td>{{criterio.Nome}}</td>
+                                    <td>{{criterio.TipoDeCriterio == 0 ? "Custo" : "Benefício"}}</td>
+                                    <td>{{criterio.Peso}}</td>
+                                    <td><button class="btn btn-secondary" ng-click="excluirCriterio(criterio.Id)"><i class="fa">&#xf00d;</i></button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary btn-lg btn-block" ng-click="gerarMatriz()">Gerar Matriz</button>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                        <br/>
+                        <div class="form-group">
+                            <input type="text" value="" data-role="tagsinput" class="tagsInput" id="tags" placeholder="Cadastre suas categorias aqui" />
+                        </div>
+
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary btn-lg btn-block" ng-click="gerarMatriz()">Gerar Matriz</button>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-matriz" role="tabpanel" aria-labelledby="nav-home-tab">
+                        <br />
+                        <div class="form-group">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th ng-repeat="criterio in Criterios">{{criterio.Nome}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="alternativa in Alternativas">
+                                        <th>{{alternativa.Nome}}</th>
+                                        <td ng-repeat="criterio in Criterios">
+                                            <input type="number" value="0" class="form-control inputValor" id="{{idProjeto}}_{{alternativa.Id}}_{{criterio.Id}}" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary btn-lg btn-block" ng-click="salvarMatriz()">Salvar Matriz</button>
+                            </div>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary btn-lg btn-block" ng-click="gerarResultado()">Gerar Resultado</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-relatorio" role="tabpanel" aria-labelledby="nav-home-tab">
+                        <div id="chart_div"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/controllers/ProjetoController.js?v=1.0.0"></script>
